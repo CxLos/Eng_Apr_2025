@@ -125,13 +125,13 @@ df.rename(
     columns={
         "Activity Duration (minutes):": "Activity Duration",
         "Total travel time (minutes):": "Travel",
-        # "Person submitting this form:": "Person",
+        "Person submitting this form:": "Person",
         "Activity Status:": "Activity Status",
-        # "Entity name:": "Entity",
-        # "Care Network Activity:": "Care Activity",
-        # "BMHC Administrative Activity:": "Admin Activity",
-        # "Community Outreach Activity:": "Outreach Activity",
-        # "Number engaged at Community Outreach Activity:": "Number Engaged",
+        "Entity name:": "Entity",
+        "Care Network Activity:": "Care Activity",
+        "BMHC Administrative Activity:": "Admin Activity",
+        "Community Outreach Activity:": "Outreach Activity",
+        "Number engaged at Community Outreach Activity:": "Number Engaged",
     }, 
 inplace=True)
 
@@ -253,129 +253,79 @@ status_pie = px.pie(
 
 # ----------------------------- Admin Activity --------------------------- #
 
-categories = [
-    '100 Black Men of Austin Quarterly Partnership Review (QPR)',
-    'Any Baby Can Tour & Partnership Meeting',
-    'BMHC + Breakthrough of Central Texas Partnership Discussion',
-    'BMHC + Community First Village Neighborhood Care Team Planning Meeting',
-    'BMHC + Community First Village Onsite Outreach Strategy Huddle',
-    'BMHC + Community First Village Onsite Outreach Strategy Planning Huddle',
-    'BMHC + Gudlife Outreach Strategy Huddle',
-    'BMHC + Gudlife Strategy Huddle',
-    'BMHC + KAZI Basketball Tournament',
-    'BMHC Gudlife Meeting',
-    'BMHC Pflugerville Asset Mapping Activities',
-    'BMHC Tour (Austin Mayor Kirk Watson & Austin City Council Member District 4 "Chito" Vela)',
-    'Biweekly PSH staffing with ECHO',
-    'Child Inc Travis County HeadStart Program (Fatherhood Program Event)',
-    'Communication & Correspondence',
-    'Community First Village Onsite Outreach',
-    'Community First Village Outreach Strategy Huddle',
-    'Compliance & Policy Enforcement',
-    'Downtown Austin Community Court Onsite Outreach',
-    'End of Week 1 to 1 Performance Review',
-    'Financial & Budgetary Management',
-    'HR Support',
-    'Housing Authority of Travis County (Self-Care Day) Outreach Event',
-    'Housing Authority of Travis County Quarterly Partnership Review (QPR)',
-    'Impact Forms Follow Up Meeting',
-    'Implementation Studios Planning & Strategy Meeting',
-    'Meeting with Cameron',
-    'Onboarding',
-    'Outreach & Navigation Leads 1 to 1 Strategy Meeting',
-    'Outreach 1 to 1 Strategy Meetings',
-    'Outreach Onboarding (Jordan Calbert)',
-    'PSH Audit for ECHO',
-    'PSH file updates and case staffing',
-    'Record Keeping & Documentation',
-    'Research & Planning',
-    'PSH support call with Dr Wallace'
+# print("Admin Unique Before: \n", df["Admin Activity"].unique().tolist())
+# print("Admin Value Counts: \n", df["Admin Activity"].value_counts())
+
+admin_uique = [
+'Record Keeping & Documentation', '', 'Community engagement and Partnership', 'Communication & Correspondence', 'Research & Planning', 'Meeting with Kensington Property Admin and tour of the remodeled property', 'weekly COA meeting and BOLO review', 'HR Support', 'HAP monthly meeting', 'email composition and scheduling for needed zoom to precede with move ins to Kensington', 'Compliance & Policy Enforcement', 'CHECK HMIS FOR SHARED CLIENT', 'Financial & Budgetary Management', 'IT', 'Community partnership', 'Outreach and community engagement', 'Office Management', 'Community Engagement', 'Engagement /Outreach', 'biweekly psh review with Doc', 'Emergency Management Training', 'PSH Meeting', '1 to 1 Strategy Meeting', 'EOW 1 to 1 Performance Review', 'Meeting with LINC for shared cases (Kevin)'
 ]
 
-categories = ['1 to 1 Outreach Strategy Meetings', 'BMHC & GUD LFE Huddle Meeting', 'BMHC & GUD LIFE Weekly Huddle', 'BMHC Gudlife Huddle', 'BMHC Internal & External Emails and Phone Calls Performed', 'BOLO list and placement', 'Bi-Partner Neighbor Partner Engagement Meeting', 'Central Health Virtual Lunch', 'Communication & Correspondence', 'Community Engagement & Events', 'Community First Village Onsite Outreach & Healthy Cuts Preventative Screenings', 'End of Week Outreach Performance Reviews', 'Financial & Budgetary Management', 'HMIS monthly reports submission to ECHO', 'HR Support', 'HSO stakeholder meeting', 'Implementation Studios Planning Meeting', 'In-Person Key Leaders Huddle', 'MOU conversation with Extended Stay America', 'Manor 5K Planning Meeting & Follow Up Activities', 'Meeting', 'Outreach & Navigation Team Leads Huddle', 'Outreach Onboarding Activities (Jordan Calbert)', 'PSH', 'PSH iPilot', 'Record Keeping & Documentation', 'Research & Planning', 'Training', 'client referrals/community partnership', 'homeless advocacy meeting', 'outreach coordination meeting', 'timesheet completion and submit to Dr. Wallace', 'weekly HMIS updates and phone calls for clients on BOLO list']
+admin_categories = [
+    # "Outreach Strategy Meetings",
+    # "BMHC GudLife Huddle",
+    # "Administrative & Communications",
+    # "Reasearch & Planning",
+    # "Reports & Documentation",
+    # "Training & Onboarding",
+    # "PSH & Client Support",
+    # "Outreach & Engagement",
+    # "Stakeholder & Key Leader Meetings",
+    # "Performance & Reviews",
+    
+    "Financial & Budgetary Management",
+    "Communication & Correspondence",
+    "Compliance & Policy Enforcement",
+    "HR Support",
+    "Office Management",
+    "Record Keeping & Documentation",
+    "Research & Planning",
+]
 
-df['BMHC Administrative Activity:'] = (
-    df['BMHC Administrative Activity:']
+df['Admin Activity'] = (
+    df['Admin Activity']
     .str.strip()
-    .replace(
-        {
-            # 1 to 1 Outreach Strategy Meetings
-            '(4) Outreach 1 to 1 Strategy Meetings': "1 to 1 Outreach Strategy Meetings",
-            'Outreach & Navigation Leads 1 to 1 Strategy Meeting': "1 to 1 Outreach Strategy Meetings",
-            'Outreach 1 to 1 Strategy Meetings': "1 to 1 Outreach Strategy Meetings",
-
-            # BMHC & GUD LIFE Huddle Meetings
-            'BMHC & GUD LFE Huddle Meeting': "BMHC & GUD LFE Huddle Meeting",
-            'BMHC & GUD LIFE Weekly Huddle': "BMHC & GUD LIFE Weekly Huddle",
-            'BMHC Gudlife Huddle': "BMHC Gudlife Huddle",
-
-            # Administrative & Communications
-            'BMHC Internal & External Emails and Phone Calls Performed': "BMHC Internal & External Emails and Phone Calls Performed",
-            'Communication & Correspondence': "Communication & Correspondence",
-            'BMHC Quarterly Team Meeting': "Communication & Correspondence",
-            'BMHC Team': "Communication & Correspondence",
-            'Community First Village Huddle': "Communication & Correspondence",
-            'Key Leaders Huddle': "Communication & Correspondence",
-            'Outreach Team Meeting': "Communication & Correspondence",
-            'Travis County Judge Andy Brown & Travis County Commissioner Ann Howard BMHC Tour & Discussion': "Communication & Correspondence",
-            'Meeting': "Meeting",
-
-            # Research & Planning
-            'Research & Planning': "Research & Planning",
-            'Events Planning Meeting': "Research & Planning",
-            'MOU conversation with Extended Stay America': "Research & Planning",
-            'Manor 5K Planning Meeting & Follow Up Activities': "Research & Planning",
-            'Implementation Studios Planning Meeting': "Implementation Studios Planning Meeting",
-
-            # Reports & Documentation
-            'Record Keeping & Documentation': "Record Keeping & Documentation",
-            'HMIS monthly reports submission to ECHO': "Record Keeping & Documentation",
-            'weekly HMIS updates and phone calls for clients on BOLO list': "Record Keeping & Documentation",
-
-            # Financial & Budgeting
-            'Financial & Budgetary Management': "Financial & Budgetary Management",
-
-            # Human Resources (HR) & Office Management
-            'HR Support': "HR Support",
-            'timesheet completion and submit to Dr. Wallace': "HR Support",
-
-            # Training & Onboarding
-            'Outreach Onboarding Activities (Jordan Calbert)': "Training",
-            'Training': "Training",
-
-            # PSH & Client Support
-            'PSH': "PSH",
-            'PSH iPilot': "PSH",
-            'client referrals/community partnership': "PSH",
-
-            # Outreach & Engagement
-            'Community Engagement & Events': "Community Engagement & Events",
-            'Community First Village Onsite Outreach & Healthy Cuts Preventative Screenings': "Community Engagement & Events",
-            'outreach coordination meeting': "Community Engagement & Events",
-            'BOLO list and placement': "Community Engagement & Events",
-
-            # Stakeholder & Key Leader Meetings
-            'In-Person Key Leaders Huddle': "Stakeholder & Key Leader Meetings",
-            'HSO stakeholder meeting': "Stakeholder & Key Leader Meetings",
-            'Bi-Partner Neighbor Partner Engagement Meeting': "Stakeholder & Key Leader Meetings",
-            'Central Health Virtual Lunch': "Stakeholder & Key Leader Meetings",
-
-            # Performance & Reviews
-            'End of Week Outreach Performance Reviews': "Performance & Reviews",
-        }
-    )
+    .replace({
+        'Record Keeping & Documentation': 'Record Keeping & Documentation',
+        '': 'N/A',
+        'Community engagement and Partnership': 'Communication & Correspondence',
+        'Communication & Correspondence': 'Communication & Correspondence',
+        'Research & Planning': 'Research & Planning',
+        'Meeting with Kensington Property Admin and tour of the remodeled property': 'Communication & Correspondence',
+        'weekly COA meeting and BOLO review': 'Communication & Correspondence',
+        'HR Support': 'HR Support',
+        'HAP monthly meeting': 'Communication & Correspondence',
+        'email composition and scheduling for needed zoom to precede with move ins to Kensington': 'Communication & Correspondence',
+        'Compliance & Policy Enforcement': 'Compliance & Policy Enforcement',
+        'CHECK HMIS FOR SHARED CLIENT': 'Record Keeping & Documentation',
+        'Financial & Budgetary Management': 'Financial & Budgetary Management',
+        'IT': 'N/A',
+        'Community partnership': 'Communication & Correspondence',
+        'Outreach and community engagement': 'Communication & Correspondence',
+        'Office Management': 'Office Management',
+        'Community Engagement': 'Communication & Correspondence',
+        'Engagement /Outreach': 'Communication & Correspondence',
+        'biweekly psh review with Doc': 'Record Keeping & Documentation',
+        'Emergency Management Training': 'N/A',
+        'PSH Meeting': 'Record Keeping & Documentation',
+        '1 to 1 Strategy Meeting': 'Communication & Correspondence',
+        'EOW 1 to 1 Performance Review': 'Communication & Correspondence',
+        'Meeting with LINC for shared cases (Kevin)': 'Communication & Correspondence'
+    })
 )
 
+# Identify unexpected/unapproved categories
+admin_unexpected = df[~df['Admin Activity'].isin(admin_categories)]
+# print("Admin Unexpected: \n", admin_unexpected['Admin Activity'].unique().tolist())
 
 # Group by 'BMHC Administrative Activity:' dataframe:
-admin_activity = df.groupby('BMHC Administrative Activity:').size().reset_index(name='Count')
-print(admin_activity["BMHC Administrative Activity:"].unique().tolist())
+admin_activity = df.groupby('Admin Activity').size().reset_index(name='Count')
+# print("Admin Unique After: \n", admin_activity["Admin Activity"].unique().tolist())
 
 admin_bar=px.bar(
     admin_activity,
-    x="BMHC Administrative Activity:",
+    x="Admin Activity",
     y='Count',
-    color="BMHC Administrative Activity:",
+    color="Admin Activity",
     text='Count',
 ).update_layout(
     height=850, 
@@ -431,7 +381,7 @@ admin_bar=px.bar(
 # Insurance Status Pie Chart
 admin_pie=px.pie(
     admin_activity,
-    names="BMHC Administrative Activity:",
+    names="Admin Activity",
     values='Count'
 ).update_layout(
     height=850,
@@ -458,16 +408,64 @@ admin_pie=px.pie(
 
 # -------------------------- Care Network Activity ----------------------- #
 
-# Group by 'Care Network Activity:' dataframe:
-care_network_activity = df.groupby('Care Network Activity:').size().reset_index(name='Count')
-
+# print("Care Network Unique Before: \n", df["Care Activity"].unique().tolist())
 # print("Care Netowrk Activities: \n", care_network_activity.value_counts())
+
+care_uique = [
+    'Work Force Development', '', 'client engagement and referrals', 'SDoH Provider', 'Clinical Provider', 'Academic', 'ECHO PSH PILOT PROGRAM', 'ECHO PSH', 'Referral service/community engagement', 'Outreach', 'Outreach/awareness', 'Community Engagement', 'Community Event for Networking', 'Religious', 'Give Back Program', 'ECHO Pilot PSH Program', 'ECHO', 'PSH PILOT', 'ECHO PILOT PROGRAM', 'Community Outreach/Awareness', 'Government'
+]
+
+care_categories = [
+    "Academic",
+    "Clinical Provider",
+    "Give Back Program",
+    "Government",
+    "Religious",
+    "SDoH Provider",
+    "Work Force Development",
+]
+
+# Replace with allowable categories:
+df['Care Activity'] = (
+    df['Care Activity']
+    .str.strip()
+    .replace({
+        '': 'N/A',
+        'client engagement and referrals': 'SDoH Provider',
+        'SDoH Provider': 'SDoH Provider',
+        'Clinical Provider': 'Clinical Provider',
+        'Academic': 'Academic',
+        'ECHO PSH PILOT PROGRAM': 'Government',
+        'ECHO PSH': 'Government',
+        'ECHO Pilot PSH Program': 'Government',
+        'ECHO': 'Government',
+        'PSH PILOT': 'Government',
+        'ECHO PILOT PROGRAM': 'Government',
+        'Referral service/community engagement': 'SDoH Provider',
+        'Outreach': 'SDoH Provider',
+        'Outreach/awareness': 'SDoH Provider',
+        'Community Engagement': 'SDoH Provider',
+        'Community Event for Networking': 'SDoH Provider',
+        'Religious': 'Religious',
+        'Give Back Program': 'Give Back Program',
+        'Community Outreach/Awareness': 'SDoH Provider',
+        'Government': 'Government',
+        'Work Force Development': 'Work Force Development',
+    })
+)
+
+# Identify unexpected/unapproved categories
+care_unexpected = df[~df['Care Activity'].isin(care_categories)]
+# print("Care Unexpected: \n", care_unexpected['Care Activity'].unique().tolist())
+
+# Group by 'Care Network Activity:' dataframe:
+care_network_activity = df.groupby('Care Activity').size().reset_index(name='Count')
 
 care_bar=px.bar(
     care_network_activity,
-    x="Care Network Activity:",
+    x="Care Activity",
     y='Count',
-    color="Care Network Activity:",
+    color="Care Activity",
     text='Count',
 ).update_layout(
     height=850, 
@@ -522,7 +520,7 @@ care_bar=px.bar(
 # Insurance Status Pie Chart
 care_pie=px.pie(
     care_network_activity,
-    names="Care Network Activity:",
+    names="Care Activity",
     values='Count'
 ).update_layout(
     height=850,
@@ -545,22 +543,68 @@ care_pie=px.pie(
 
 # --------------------------Community Outreach Activity ---------------------- #
 
-# Replace values in the original DataFrame before grouping
-df['Community Outreach Activity:'] = df['Community Outreach Activity:'].replace({
-    "Movement is medicine": "Movement is Medicine",
-     "CTAAF Conference Presentation (advocacy of BMHC + AMEN movement is medicine )" : "CTAAF Conference Presentation"
-})
+# print("Outreach Unique Before: \n", df['Outreach Activity'].unique().tolist())
+
+outreach_unique = [
+    'Advocacy', 'Health Event', 'NEW PROPERTY TOUR', 'ECHO PSH', 'Presentation', 'Tabling', 'meeting', 'Health Event /Tabling', 'Movement is Medicine', 'Outreach & Navigation', 'Tabling Event', 'Continuous education/Training', 'Huddle weekly meeting', 'Community engagement /outreach networking', 'Community Engagement', 'Weekly staff meeting', 'In person event', 'Event (virtual)', 'Movement is medicine', 'Advocacy, Presentation', 'huddle', 'Advocacy, Tabling Event', 'TCSO jail application and meeting with Cameron', 'Presentation, Tabling Event', 'Event (virtual), Presentation'
+]
+
+outreach_categories = [
+    "Advocacy",
+    "Event (virtual)",
+    "Presentation",
+    "Tabling Event",
+    "Health Event",
+]
+
+# Replace outreach_unique values above with outreach_categories:
+df['Outreach Activity'] = (
+    df['Outreach Activity']
+    .str.strip()
+    .replace({
+        'Advocacy': 'Advocacy',
+        'Health Event': 'Health Event',
+        'NEW PROPERTY TOUR': 'Event (virtual)',
+        'ECHO PSH': 'Event (virtual)',
+        'Presentation': 'Presentation',
+        'Tabling': 'Tabling Event',
+        'meeting': 'Event (virtual)',
+        'Health Event /Tabling': 'Health Event',
+        'Movement is Medicine': 'Health Event',
+        'Outreach & Navigation': 'Advocacy',
+        'Tabling Event': 'Tabling Event',
+        'Continuous education/Training': 'Presentation',
+        'Huddle weekly meeting': 'Event (virtual)',
+        'Community engagement /outreach networking': 'Advocacy',
+        'Community Engagement': 'Advocacy',
+        'Weekly staff meeting': 'Event (virtual)',
+        'In person event': 'Health Event',
+        'Event (virtual)': 'Event (virtual)',
+        'Movement is medicine': 'Health Event',
+        'Advocacy, Presentation': 'Advocacy',
+        'huddle': 'Event (virtual)',
+        'Advocacy, Tabling Event': 'Advocacy',
+        'TCSO jail application and meeting with Cameron': 'Advocacy',
+        'Presentation, Tabling Event': 'Presentation',
+        'Event (virtual), Presentation': 'Event (virtual)',
+        '': 'N/A',
+    })
+)
+
+# Identify unexpected/unapproved categories
+outreach_unexpected = df[~df['Outreach Activity'].isin(outreach_categories)]
+print("Outreach Unexpected: \n", outreach_unexpected['Outreach Activity'].unique().tolist())
 
 # Group by 'Community Outreach Activity:' dataframe
-community_outreach_activity = df.groupby('Community Outreach Activity:').size().reset_index(name='Count')
+community_outreach_activity = df.groupby('Outreach Activity').size().reset_index(name='Count')
 
 # print(community_outreach_activity.value_counts())
 
 community_bar=px.bar(
     community_outreach_activity,
-    x="Community Outreach Activity:",
+    x="Outreach Activity",
     y='Count',
-    color="Community Outreach Activity:",
+    color="Outreach Activity",
     text='Count',
 ).update_layout(
     height=850, 
@@ -618,7 +662,7 @@ community_bar=px.bar(
 # Insurance Status Pie Chart
 community_pie=px.pie(
     community_outreach_activity,
-    names="Community Outreach Activity:",
+    names="Outreach Activity",
     values='Count'
 ).update_layout(
     height=850,
@@ -644,42 +688,70 @@ community_pie=px.pie(
 
 # ------------------------ Person Submitting Form -------------------- #
 
-#  Unique values:
+print("Person Unique Before: \n", df["Person"].unique().tolist())
 
-# 'Antonio Montgomery'
-#  'Cameron Morgan' 
-#  'Dominique Street' 
-#  'Jordan Calbert'
-#  'KAZI 88.7 FM Radio Interview & Preparation'
-#  'Kim Holiday'
-#  'Kiounis Williams' 
-#  'Larry Wallace Jr.'
-#  'Sonya Hosey' 
-#  'Toya Craney'
+person_unique =[
+    'Larry Wallace Jr.', 
+    'Eric Roberts',
+    'Toya Craney', 
+    'Kim Holiday', 
+    'Eric roberts',
+    'Michael Lambert',
+    'Eric Robert',
+    'Antonio Montgomery', 
+    'Kiounis Williams',
+    'Jordan Calbert', 
+    'Kimberly Holiday', 
+    'Jaqueline Oviedo',
+    'Cameron Morgan',
+    'Steve Kemgang', 'Sonya Hosey'
+]
 
-df['Person submitting this form:'] = (
-    df['Person submitting this form:']
+person_categories = [
+    "Antonio Montgomery",
+    "Azaniah Israel",
+    "Cameron Morgan",
+    "Dominique Street",
+    "Eric Roberts",
+    "Jaqueline Oviedo",
+    "Jordan Calbert",
+    "Kimberly Holiday",
+    "Kiounis Williams",
+    "Michael Lambert",
+    "Larry Wallace Jr.",
+    "Sonya Hosey",
+    "Steve Kemgang",
+    "Toya Craney",
+]
+
+df['Person'] = (
+    df['Person']
     .str.strip()
     .replace({
         "Larry Wallace Jr": "Larry Wallace Jr.", 
         "Antonio Montggery": "Antonio Montgomery",
-        "KAZI 88.7 FM Radio Interview & Preparation" : "Unknown",
+        "Kim Holiday" : "Kimberly Holiday",
         "Eric roberts" : "Eric Roberts",
         "Eric Robert" : "Eric Roberts",
     })
 )
 
-# df['Person submitting this form:'] = df['Person submitting this form:'].replace("Kiounis Williams ", "Kiounis Williams")
+# Identify unexpected/unapproved categories
+person_unexpected = df[~df['Person'].isin(person_categories)]
+print("Person Unexpected: \n", person_unexpected['Person'].unique().tolist())
 
-df_person = df.groupby('Person submitting this form:').size().reset_index(name='Count')
+df_person = df.groupby('Person').size().reset_index(name='Count')
 # print(df_person.value_counts())
-# print(df_person["Person submitting this form:"].unique())
+# print("Person Unique After: \n", df_person["Person submitting this form:"].unique().tolist())
+
+# Sort the DataFrame by 'Count' in ascending order:
+df_person = df_person.sort_values(by='Person', ascending=True)
 
 person_bar=px.bar(
     df_person,
-    x='Person submitting this form:',
+    x='Person',
     y='Count',
-    color='Person submitting this form:',
+    color='Person',
     text='Count',
 ).update_layout(
     height=650, 
@@ -737,7 +809,7 @@ person_bar=px.bar(
 # Person Pie Chart
 person_pie=px.pie(
     df_person,
-    names="Person submitting this form:",
+    names="Person",
     values='Count'  # Specify the values parameter
 ).update_layout(
     height=650, 
@@ -788,7 +860,7 @@ engagement_table.update_layout(
 )
 
 # Group by 'Entity name:' dataframe
-entity_name_group = df.groupby('Entity name:').size().reset_index(name='Count')
+entity_name_group = df.groupby('Entity').size().reset_index(name='Count')
 
 # Entity Name Table
 entity_name_table = go.Figure(data=[go.Table(
@@ -831,13 +903,13 @@ app.layout = html.Div(
             className='divv', 
             children=[ 
                 html.H1('Partner Engagement Report', className='title'),
-                html.H1('March 2025', className='title2'),
+                html.H1(f'{current_month} 2025', className='title2'),
                 html.Div(
                     className='btn-box', 
                     children=[
                         html.A(
                             'Repo',
-                            href='https://github.com/CxLos/Eng_Mar_2025',
+                            href=f'https://github.com/CxLos/Eng_Mar_{report_year}',
                             className='btn'
                         )
                     ]
@@ -912,7 +984,7 @@ app.layout = html.Div(
             className='row1',
             children=[
                 html.Div(
-                    className='graph11',
+                    className='graph111',
                     children=[
                         html.Div(className='high1', children=['Travel Hours']),
                         html.Div(
