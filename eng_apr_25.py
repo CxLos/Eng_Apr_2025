@@ -72,6 +72,7 @@ df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
 # Filtered df where 'Date of Activity:' is in December
 df['Date of Activity'] = pd.to_datetime(df['Date of Activity'], errors='coerce')
+df_larry = df[df['Date of Activity'].dt.month.isin([10, 11, 12, 1, 2, 3, 4, 5])]
 df = df[df['Date of Activity'].dt.month == 4]
 
 # Get the reporting month:
@@ -134,6 +135,22 @@ df.rename(
         "Number engaged at Community Outreach Activity:": "Number Engaged",
     }, 
 inplace=True)
+
+df.rename(
+    columns={
+        "Activity Duration (minutes):" : "Activity Duration",
+        "Total travel time (minutes):" : "Travel",
+        "Person submitting this form:'," : "Person",
+        "Location Encountered:" : "Location",
+        "Individual's Insurance Status:" : "Insurance",
+        "Type of support given:" : "Support",
+        "Gender:" : "Gender",
+        "Race/Ethnicity:" : "Ethnicity",
+        # "" : "",
+    }, 
+inplace=True)
+
+df_larry = df[df['Person'] == 'Larry Wallace Jr.']
 
 # ========================= Total Engagements ========================== #
 
@@ -231,7 +248,6 @@ status_bar=px.bar(
     hovertemplate='<b>Status:</b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
 )
 
-# Support Pie Chart
 status_pie = px.pie(
     df_activity_status,
     names='Activity Status',
@@ -244,7 +260,8 @@ status_pie = px.pie(
         family='Calibri',
         size=17,
         color='black'
-    )
+    ),
+    margin=dict(t=70, r=50, b=30, l=40),
 ).update_traces(
     rotation=0,
     textinfo='value+percent',
@@ -745,7 +762,7 @@ df_person = df.groupby('Person').size().reset_index(name='Count')
 # print("Person Unique After: \n", df_person["Person submitting this form:"].unique().tolist())
 
 # Sort the DataFrame by 'Count' in ascending order:
-df_person = df_person.sort_values(by='Person', ascending=True)
+df_person = df_person.sort_values(by='Count', ascending=False)
 
 person_bar=px.bar(
     df_person,
@@ -984,7 +1001,7 @@ app.layout = html.Div(
             className='row1',
             children=[
                 html.Div(
-                    className='graph111',
+                    className='graph11',
                     children=[
                         html.Div(className='high1', children=['Travel Hours']),
                         html.Div(
@@ -995,6 +1012,29 @@ app.layout = html.Div(
                                     children=[html.H1(className='high2', children=[total_travel_time])]
                                 )   
                             ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        dcc.Graph(
+                            # figure=status_pie
+                        )
+                    ]
+                )
+            ]
+        ),
+
+        # Row 1: Engagements and Hours
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph1',
+                    children=[
+                        dcc.Graph(
+                            figure=status_bar
                         )
                     ]
                 ),
@@ -1208,19 +1248,74 @@ app.layout = html.Div(
 print(f"Serving Flask app '{current_file}'! 🚀")
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
-                #    False)
+    app.run_server(debug=
+                    True)
+                    # False)
 # =================================== Updated Database ================================= #
-
-# updated_path = f'data/Engagement_{current_month}_{Report Year}.xlsx'
-# data_path = os.path.join(script_dir, updated_path)
-# df.to_excel(data_path, index=False)
-# print(f"DataFrame saved to {data_path}")
 
 # updated_path1 = 'data/service_tracker_q4_2024_cleaned.csv'
 # data_path1 = os.path.join(script_dir, updated_path1)
 # df.to_csv(data_path1, index=False)
 # print(f"DataFrame saved to {data_path1}")
+
+# updated_path = f'data/Engagement_{current_month}_{report_year}.xlsx'
+# # updated_path = f'data/engagement_larry_wallace_jr.xlsx'
+# data_path = os.path.join(script_dir, updated_path)
+
+# with pd.ExcelWriter(data_path, engine='xlsxwriter') as writer:
+#     df.to_excel(
+#             writer, 
+#             sheet_name=f'Engagement {current_month} {report_year}', 
+#             startrow=1, 
+#             index=False
+#         )
+
+#     # Access the workbook and each worksheet
+#     workbook = writer.book
+#     sheet1 = writer.sheets['Engagement April 2025']
+    
+#     # Define the header format
+#     header_format = workbook.add_format({
+#         'bold': True, 
+#         'font_size': 13, 
+#         'align': 'center', 
+#         'valign': 'vcenter',
+#         'border': 1, 
+#         'font_color': 'black', 
+#         'bg_color': '#B7B7B7',
+#     })
+    
+#     # Set column A (Name) to be left-aligned, and B-E to be right-aligned
+#     left_align_format = workbook.add_format({
+#         'align': 'left',  # Left-align for column A
+#         'valign': 'vcenter',  # Vertically center
+#         'border': 0  # No border for individual cells
+#     })
+
+#     right_align_format = workbook.add_format({
+#         'align': 'right',  # Right-align for columns B-E
+#         'valign': 'vcenter',  # Vertically center
+#         'border': 0  # No border for individual cells
+#     })
+    
+#     # Create border around the entire table
+#     border_format = workbook.add_format({
+#         'border': 1,  # Add border to all sides
+#         'border_color': 'black',  # Set border color to black
+#         'align': 'center',  # Center-align text
+#         'valign': 'vcenter',  # Vertically center text
+#         'font_size': 12,  # Set font size
+#         'font_color': 'black',  # Set font color to black
+#         'bg_color': '#FFFFFF'  # Set background color to white
+#     })
+
+#     # Merge and format the first row (A1:E1) for each sheet
+#     sheet1.merge_range('A1:N1', f'Engagement Report {current_month} {report_year}', header_format)
+
+#     # Set column alignment and width
+#     # sheet1.set_column('A:A', 20, left_align_format)   
+
+#     print(f"Engagement Excel file saved to {data_path}")
 
 # -------------------------------------------- KILL PORT ---------------------------------------------------
 
