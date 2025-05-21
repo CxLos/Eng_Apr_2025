@@ -61,10 +61,8 @@ sheet = client.open_by_url(sheet_url)
 data = pd.DataFrame(client.open_by_url(sheet_url).sheet1.get_all_records())
 df = data.copy()
 
-# Trim leading and trailing whitespaces from column names
+# Strip whitespace
 df.columns = df.columns.str.strip()
-
-# Trim whitespace from values in all columns
 df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
 # Define a discrete color sequence
